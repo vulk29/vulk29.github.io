@@ -1,0 +1,658 @@
+---
+title: "Solving Business Problems with R"
+
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true 
+    theme: readable
+    toc_depth: 3
+    toc_float: true
+   
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+**This page containts supporting material for the course "Solving Business Problems with R".**
+**This content was created and curated by Jedrek Miecznikowski to support the R course running in fall 2020 at AU**
+**Parts of this presentation were developed by http://datacarpentry.org and are therefore marked with Copyright (c) Data Carpentry"**
+
+## 1. Introduction to R: basic programming concepts, how to get help
+
+Here I will present the basics. Installing R and RStudio. Basic syntax, mathematical operators, objects, classes, structures.
+
+### Installing R and RStudio
+
+What you're gonna need is to install the R software environment [here](https://mirrors.dotsrc.org/cran/) for your operating system.
+  
+![](https://eeecon.uibk.ac.at/~discdown/rprogramming/images/02/02_R_cran.jpg){width=50% height=50%}  
+  
+Click on the link to your OS and click on the latest version to install, for mac it's the latest .pkg file on top of the list (4.0.0)
+
+Then install RStudio, which is an integrated development environment or [IDE](https://en.wikipedia.org/wiki/Integrated_development_environment). It is where you will spend most time with R, it has a welcoming layout and many functions that make R more accessible if you've only worked with graphical user interface tools for analyzing data, such as excel.  
+To install RStudio, see https://rstudio.com/products/rstudio/download/#download for the free desktop version.
+
+Once you've installed RStudio you should see something like this.  
+  
+![](images/RStudioIntro1.png)
+
+
+## Knowing your way around RStudio (Copyright (c) Data Carpentry)
+
+Let's start by learning about [RStudio](https://www.rstudio.com/), which is an
+Integrated Development Environment (IDE) for working with R.
+
+The RStudio IDE open-source product is free under the
+[Affero General Public License (AGPL) v3](https://www.gnu.org/licenses/agpl-3.0.en.html).
+The RStudio IDE is also available with a commercial license and priority email
+support from RStudio, Inc.
+
+We will use the RStudio IDE to write code, navigate the files on our computer,
+inspect the variables we create, and visualize the plots we generate. RStudio 
+can also be used for other things (e.g., version control, developing packages, 
+writing Shiny apps) that we will not cover during the workshop. 
+
+One of the advantages of using RStudio is that all the information
+you need to write code is available in a single window. Additionally, RStudio 
+provides many shortcuts, autocompletion, and highlighting for the major file 
+types you use while developing in R. RStudio makes typing easier and less
+error-prone.
+
+
+## Getting set up (Copyright (c) Data Carpentry)
+
+It is good practice to keep a set of related data, analyses, and text
+self-contained in a single folder called the **working directory**. All of the
+scripts within this folder can then use *relative paths* to files. Relative paths
+indicate where inside the project a file is located (as opposed to absolute paths, 
+which point to where a file is on a specific computer). Working this way makes it
+a lot easier to move your project around on your computer and share it with
+others without having to directly modify file paths in the individual scripts.
+
+RStudio provides a helpful set of tools to do this through its "Projects"
+interface, which not only creates a working directory for you but also remembers
+its location (allowing you to quickly navigate to it). The interface also 
+(optionally) preserves custom settings and open files to make it easier to 
+resume work after a break. 
+
+
+### Create a new project (Copyright (c) Data Carpentry)
+
+* Under the `File` menu, click on `New project`, choose `New directory`, then
+  `New project`
+* Enter a name for this new folder (or "directory") and choose a convenient
+  location for it. This will be your **working directory** for the rest of the
+  day (e.g., `~/data-carpentry`)
+* Click on `Create project`
+* Create a new file where we will type our scripts. Go to File > New File > R
+  script. Click the save icon on your toolbar and save your script as
+  "`script.R`".
+  
+### Organizing your working directory (Copyright (c) Data Carpentry)
+
+Using a consistent folder structure across your projects will help keep things
+organized and make it easy to find/file things in the future. This
+can be especially helpful when you have multiple projects. In general, you might
+create directories (folders) for **scripts**, **data**, and **documents**. Here
+are some examples of suggested directories:
+
+ - **`data/`** Use this folder to store your raw data and intermediate datasets. 
+   For the sake of transparency and [provenance](https://en.wikipedia.org/wiki/Provenance), you
+   should *always* keep a copy of your raw data accessible and do as much of
+   your data cleanup and preprocessing programmatically (i.e., with scripts,
+   rather than manually) as possible.
+ - **`data_output/`** When you need to modify your raw data,
+   it might be useful to store the modified versions of the datasets in a different folder.
+ - **`documents/`** Used for outlines, drafts, and other
+   text.
+ - **`fig_output/`** This folder can store the graphics that are generated
+   by your scripts.
+ - **`scripts/`** A place to keep your R scripts for
+   different analyses or plotting.
+
+You may want additional directories or subdirectories depending on your project
+needs, but these should form the backbone of your working directory.
+
+<!-- ![Example of a working directory structure](../fig/working-directory-structure.png) -->
+
+### The working directory (Copyright (c) Data Carpentry)
+
+The working directory is an important concept to understand. It is the place
+where R will look for and save files. When you write code for
+your project, your scripts should refer to files in relation to the root of your working
+directory and only to files within this structure.
+
+Using RStudio projects makes this easy and ensures that your working directory
+is set up properly. If you need to check it, you can use `getwd()`. If for some
+reason your working directory is not what it should be, you can change it in the
+RStudio interface by navigating in the file browser to where your working directory
+should be, clicking on the blue gear icon "More", and selecting "Set As Working
+Directory". Alternatively, you can use `setwd("/path/to/working/directory")` to
+reset your working directory. However, your scripts should not include this line,
+because it will fail on someone else's computer.
+
+  
+### The RStudio Interface  
+Let's take a quick tour of RStudio.
+
+
+In the panel called Console you can play around with what R can do. One of the most important things to do first is to install packages which will be usefull and/or necessary for solving the problems in this course and beyond. 
+
+To install your first package, paste this into the console field specified on the screnshot:
+```
+install.packages("dplyr")
+```
+Once the package has been installed, to use it, we will need to load it to use it 
+```
+library(dplyr)
+```
+
+In any learning any programming language your best weapon is __documentation__. In R studio you can view it directly in the help window in the lower left corner. To call the documentation and find out more about a function or package simply add a question mark before the name and run it. For example, one of the two functions we've used so far is `library`, let's find out more about it. 
+
+```
+?library
+```
+![](images/RStudioIntro2.png)
+
+The help box reveals all the useful information about the function, such as the description, the arguments the function takes, examples of use, related functions and the package the funtion comes from. In the case of `library`, the package is `{base}`, a related function is `require`, the description yields that the function 'loads and attaches packages', the arguments include for example `quietly`, which is a boolean that controls whether library prints out that the attaching of the package was successfull or not. Under 'Usage', you can also see the what are the default values of the arguments, for example, see that `quietly` has a default of `FALSE` so `library` will print to alert you of a successful attachment, unless you explicitly tell it not to: 
+```
+library(stargazer, quietly = TRUE) # I attach stargazer which is a package for latex tables
+```  
+
+If you prefer to learn through videos, here is a comprehensive intro covering the bases by "How to R". It explains the interface of RStudio and the basic capabilities and is very accessible.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/lVKMsaWju8w" frameborder="0"  allowfullscreen ></iframe>
+  
+------
+## 2. Basic programming concepts  
+
+There is a plethora of resources online that explain the basics well. See also the Part II in the Hands on programming book.
+  
+Alternatively, see [Chapter 4](https://r4ds.had.co.nz/workflow-basics.html) in the book by one of R's creators Hadley Wickham called "R for Data Science". Bear in mind that Wickham starts his book off with data visualisation, hence the exercise portion assumes that prerequisite. 
+  
+If you're a viewer, the accessible option is a video by "How to R" which covers all the basics like using R as a calculator, assigning values and types of objects well, if slightly superficially. It is accessible, inviting and short.
+  
+<iframe width="560" height="315" src="https://www.youtube.com/embed/h_Nruq9-NQw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  
+For the student that wants to go deeper, I recommend a video from Berkeley's R bootcamp. It covers the same bases as the video above, but expands on them greatly. Contrary to the one above, it includes conceptual commentary, being a part of a lecture. What is particularly beneficial is that it does not brush over vectors and is very thorough with data structures. Unsurprisingly, it is also nearly three times the length of the previous one.
+  
+<iframe width="560" height="315" src="https://www.youtube.com/embed/CWrz8JJGKvI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+Whatever you do, don't just passively listen/read/watch. Try and work through some of the exercises.
+
+I recommend the _swirl_ package, which is a built in learning experience in the R console. You can start it by installing the package, calling it and finally launching _swirl_. See the code below. (You can paste it directly into your console!) Once you launch, choose the R Programming course and start with "Basic Building Blocks".
+```
+install.packages("swirl") # install, you only need to do this once
+library(swirl) # call
+swirl() # launch
+```
+  
+------
+  
+## 3. Question development
+
+> *“There are no routine statistical questions, only questionable statistical routines.” — Sir David Cox*
+
+To analyze any dataset you're being faced with in a business situation you will need to first understand it, and understanding comes through asking the right questions. In the later parts you will gain tools which will let you find answers. It is of utmost importance to ask the correct questions first. There is no routine that will let us do that with 100% accuracy, but there is a few good resources out there that teach good habits.
+  
+There are a few very basic functions that let us explore the data and are omitted in many tutorials. The first thing you must do when getting a dataset is to load it into R, most likely using `read.csv()`. Here, I am going to use the built-in `iris` dataset. But for now, I do not know anything about it. 
+
+First, I would like to find out how does it look, by taking a look at the first couple of observations and the variables (columns), so essentially the "top of the table".
+
+```{r}
+head(iris)
+```
+
+Now, I have my very preliminary overview. It seems as though everything is in place, the variables are not confused with observations and the data looks to be parsed correctly. But what I still do not know is what are these variables and what do the observations represent. For that, I will use the `str()` and `summary()` functions. The first one stands for _structure_ and gives a compact overview on how many observations does the [data frame](https://www.tutorialspoint.com/r/r_data_frames.htm) have, and crucially the number of variables, their full names and type. `summary()` returns a table basic descriptive summaries of the data by variable. See the outputs for the `iris` dataset below.
+
+```{r}
+str(iris)
+summary(iris)
+```
+
+You might also want to find out what's the _class_ of your data, because there are certain operations that are reserved for fx. data frames. To find out use, `class()`.  
+Lastly, you might want to get a good old-fashioned look at the table just like you did back in your excel days. To open your data in a new "tab" in RStudio use `View()`. If you want to just look at one of the variables, for example the _Species_ from the `iris` dataset, you can use `View(iris$Species)`. For looking specific observations (rows), for example the second and fiftieth ones in the iris dataset, type in `View(iris[c(2,50),])`. Copy and paste the code below into your RStudio to try it out.
+```
+View(iris$Species) # open the Species column in a new tab
+View(iris[c(2,50),]) # open the 2nd and 50th rows in a new tab
+```
+### EDA resources
+
+Once again, "Data Science with R" offers a comprehensive explanation of the topic, with examples and exercises to offer. I strongly recommend to take a look at [Chapter 7](https://r4ds.had.co.nz/exploratory-data-analysis.html). The chapter is heavy on data visualisation which has not been covered yet, so a discaimer that not all the code will make sense nor should it. Alternatively, you may familiarize yourself with [Chapter 3](https://r4ds.had.co.nz/data-visualisation.html) and be ahead of the curve.  
+The most important takeaway is understanding the two fundaments of EDA, variation and covariation.
+
+If you learn better by watching, here is a video on univariate EDA, that explores the first fundament, variation. I recommend watching the videos in this section with an enhanced speed `1.25` or `1.5`.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ONrGJF_8onw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" ></iframe>
+
+The second part on EDA from James Dayhuff deals with multivariate analysis, or as Wickham puts it, covariance.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/-tTJHRaPXxk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+To practice: use the swirl package covered above. Enter the code below in you console and follow the prompts! (fair warning: includes a lot of visualisation!)
+```
+library(swirl)
+install_course("Exploratory_Data_Analysis")
+swirl()
+```
+## 3. Data: how to organize and clean up data
+
+In this section we will explore how to work with datasets which are not perfect and need some 'cleaning' before they can be used for business purposes, like reporting. But, even if it _is_ clean you're gonna need to know how to organize it. 
+
+You're gonna need to install a package of packages for that if you haven't already. As you might have guessed, it's `tidyverse`, your one-stop shop for getting started with manipulating data. Mind you, there is a _raging_ debate on whether to start with tidyverse or base R, and I do encourage you to check it out if you want to dig deeper. Both have their pros and cons, here, you are gonna learn the _tidyverse_ right away for faster results, but bear in mind that [there is another way.](https://github.com/matloff/TidyverseSkeptic).
+
+Okay, now that that's out of the way, let's install the tidyverse.
+```
+install.packages('tidyverse')
+library(tidyverse)
+```
+Having done that, see the cheatsheet below of the most important organizing functions and their purpose.
+```
+filter() # select only the rows that match your criteria
+arrange() # sort the rows by one or more columns (or more complex)
+select() # select only the columns you need
+mutate() # add new columns, fx by making operations on the others
+group_by() # groups the data frame to individual columns
+summarise() # used with group_by to get summaries (mean, sum) for groups
+```
+Note that all the `dplyr` verbs do not change the original dataset, and if you use them _without_ assigning them to variables like this:
+```
+filter(iris, Species == "setosa") # filter only the flowers of 'setosa' species
+```
+We can now look at our `iris` dataset to see whether it has changed.
+```
+View(iris) # to op4n a tab with the dataset
+str(iris$Species) # to see if we dropped any Species from the column
+```
+It's clearly remained whole. Therefore, whenever you use `dplyr` verbs remember to assign the new data frames to new variables, if you're gonna use them later. 
+
+
+### dplyr resources
+
+For a comprehensive cheatsheet with more verbs, look to the RStudio's materials on `dplyr`, which is the tidyverse package all these functions belong to. 
+
+![](https://d33wubrfki0l68.cloudfront.net/db69c3d03699d395475d2ac14d64f611054fa9a4/e98f3/wp-content/uploads/2018/08/data-transformation.png)
+[I suggest you bookmark it for future use. I did.](https://d33wubrfki0l68.cloudfront.net/db69c3d03699d395475d2ac14d64f611054fa9a4/e98f3/wp-content/uploads/2018/08/data-transformation.png)  
+
+As always, I refer you to "R for Data Science", the material needed for understanding this section is [Chapter 5](https://r4ds.had.co.nz/transform.html) on Data Transformation.
+
+The resource section of course also caters to the perpetual YouTube viewer, with Data School's intro do dplyr which covers all the bases accessibly. It also comes with a [website similar to the one you're on](https://rpubs.com/justmarkham/dplyr-tutorial), that makes it easier to follow along. Save time by watching this video with _1.25_ times the original speed :-)
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/jWjqLW-u3hc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+## 4. Data collection, cleansing, merging of datasets
+
+It might very well happen that you will need to do some legwork in order to start using your dataset for gathering insights. It is often said that data scientists spend up to 80% of their time cleaning data ([Dasu and Johnson 2003](https://onlinelibrary.wiley.com/doi/book/10.1002/0471448354)), which is important to keep in mind when practicing data science as well as managing a team of data scientists. An additional important note is that tidying refers to arranging datasets such that each variable is a column and each observation (or case) is a row ([Wickham, 2014](https://www.jstatsoft.org/article/view/v059i10)), data cleansing or cleaning has many definitions and can either refer to a general process of "transforming raw data into consistent data that can be analyzed"([de Jonge and van der Loo, 2013](https://cran.r-project.org/doc/contrib/de_Jonge+van_der_Loo-Introduction_to_data_cleaning_with_R.pdf)) or more specifically to removing/fixing duplicates, corrupted, incomplete data ([Müller and Freytag, 2003](http://www.dbis.informatik.hu-berlin.de/fileadmin/research/papers/techreports/2003-hub_ib_164-mueller.pdf)). This section will mostly deal with tidy data and later introduce merging of datasets. 
+
+### Tidying data 
+
+Most commononly encountered problems with data sets include:  
+
+1. Observations are mixed with variables  
+  + some of the rows should be columns or the other way around  
+2. Multiple columns should be stored as one  
+  + separate day, month, year  
+3. One variable stores two or more pieces of data and should be split in two.  
+  + two sentences separated in two  
+
+And many more that are outlined and discussed in an [article on tidy data that can be found on CRAN](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html). The article provides guidelines and solutions for frequently encountered problems as well as ready-made code chunks. 
+
+For an even more detailed and theoretically comprehensive outlook on tidy data look to [chapter 12 of the book](https://r4ds.had.co.nz/tidy-data.html) and do the exercises. Should that not be enough, you can turn to [Hadley Wickham's academic article](https://www.jstatsoft.org/article/view/v059i10) in the Journal of Statistical software.
+
+The most important functions are captured in the cheatsheet below, which you can [download here](https://rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf).
+
+![](images/Tidycheat.png)
+
+In terms of video content, I'd recommend a pretty specific video cleaning a sales promotion dataset. It's straightforward but also quite a narrow example, it's only 23 minutes and the teacher is engaging, do give it a try.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/wisqb4BFmEY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  
+  
+It showcases an important feature of this part of a data scientist's job. Namely, that all tidy datasets are the same, but all messy ones are messy in their own way, so there is a lot of extra non-routine work involved in figuring out exactly how to fix any specific case. That said, we're programming here, so once you've solved it and a new batch of data comes through next month, you can just run the same script on it or even have the machine do it for you every Monday. How cool is that? 
+
+Very cool.
+
+### Merging datasets
+
+Sometimes when you're doing analysis you might collect your data from multiple sources and then put it together, for example sales data from multiple branches of the business that is being sent every week by managers to the data analysis team. Good news is you can very effectively use tidyverse for that purpose, bad news is that it often will require some work if the two datasets are not standardized in the same way. Therefore, what you want to do for each of them first is ensuring that they are all tidy and then merging them easily into a master data frame that will inherently also be tidy. In other words, if you add tidy and tidy together you get tidy. On the other hand, if you add messy and messy, you get a whole new kind of messy that can be very difficult to clean.
+
+For a video introduction to merging, check out the webinar from RStudio itself, I recommend watching the whole thing for good fundaments of using dplyr and refreshing on some stuff already covered. The merging part begins at 41:50, see the embed below.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/y9KJmUGc8SE?start=2509" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
+## 5. Cluster analysis
+
+The next topic to cover is the first one that deals more with math than it does with programming. Cluster analysis is finding subgroups of observations within a data set. Usually if we plot a few observations based on two variables, we can do this easily by "eyeballing" them, but computers can't. They don't know how many clusters to build or how to put them together. If we manage to teach them that, we can exceed the ability of our own eyes and include many more variables and have much better clusters. Cluster analysis is what computer scientists would call an "unsupervised learning method", because there is no response variable ("y") and the algorithm instead of predicting something, tries to find similarities in the existing data and group it. Incidentally, cluster analysis is also _probably_ your very first **machine learning** model, so that's one buzzword off the bucket list.
+
+On a serious note, as you might already know, there are two most popular approaches to algorithmically solving the clustering problem, *k-means* and *hierarchical clustering*. In this section I will focus on what is probably the most popular one, *k-means*. ([Seif, 2018](https://towardsdatascience.com/the-5-clustering-algorithms-data-scientists-need-to-know-a36d136ef68))  
+  
+Now, as I stated before, it is more of a mathematical challenge than it is a programmatic one. Once one understood both of the methods and can apply one, R offers packages (e.g. `cluster`) with built in functions that combined form a ready-made recipe for performing cluster analysis. 
+  
+If you feel rusty on the theoretical side and would like to code along a more math-heavy example, I recommend [this article from the University of Cincinnati](https://uc-r.github.io/kmeans_clustering) (there are other great resources on the same page which are worth checking out).  
+  
+For fast results and an easy walk-through check out the Youtube video below. In the beginning it deals with important measures to take to prepare one's dataset for clustering and then dives straight into the hierarchical method to later emerge with a *k-means* around [14:45](https://youtu.be/5eDqRysaico?t=885).
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/5eDqRysaico?start=885" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+### K-means clustering example
+
+You might recall the `iris` dataset we've talked about above. Let's try performing clustering on it and do a walk-through. First, if your machine doesn't have the packages, we better install them. PS we're also gonna use tidyverse but I assume by now it's all installed.
+
+```
+install.packages(c("cluster", "factoextra"))
+```
+We're also gonna load them once we're at it.
+```{r warning=FALSE, message=FALSE}
+library(tidyverse)
+library(cluster)
+library(factoextra)
+```
+Now we can get onto the first step which is loading our data which in this case is built-in. We'll assign it to a variable to store it and perform operations on it.
+```{r}
+df <- iris
+```
+Now, as you probably remember, `iris` has 5 variables, the first four are continuous and store information about widths and lengths of sepals and petals, the fifth is a categorical variable that stores species. The first step before doing clustering is often to plot any two continuous variables that we might suspect have an illustrative relationship and try to 'eyeball' the clusters. In this special case it would not be crazy to assume that clusters could be species of irises, therefore I will add a colour to see whether that's a reasonable assumption. I also add a `theme_bw`, because I can't stand the grey default of ggplots. Highly recommend.
+```{r}
+ggplot(data=iris, mapping = aes(y = Petal.Length, x = Petal.Width)) + 
+  geom_point(mapping = aes(color = Species))+
+  theme_bw()
+```
+
+Here we see that the Species mostly follow what we'd expect by eyeballing in terms of the Petals. This is of course a subjective exercise but if I were gonna cluster the flowers with my eyes based only on those two variables and without knowing about the Species, it'd look something like this. 
+```{r}
+ggplot(data=iris, mapping = aes(y = Petal.Length, x = Petal.Width)) + 
+  geom_point(mapping = aes(color = Species)) +
+  geom_point(data=iris[iris$Petal.Width<0.75,],
+             pch=21, fill=NA, size=3, colour="red", stroke=1) +
+  geom_point(data=iris[iris$Petal.Width>0.75&iris$Petal.Width<1.75,],
+             pch=21, fill=NA, size=3, colour="green", stroke=1) +
+  geom_point(data=iris[iris$Petal.Width>1.75,],
+             pch=21, fill=NA, size=3, colour="blue", stroke=1) + 
+  theme_bw()
+```
+  
+As you can see it's mostly the same as the Species, apart from some Virginica and Versicolor tension there where some blue points get encircled by the green cluster. Eyeballing is a good exercise to have an idea about the dataset and how many clusters do we expect there to be. Now, we want to see how the computer tackles this task based on 4 continuous variables, (we can only effectively eyeball 2 at once). How many clusters will our k-means have and how will they look like? Let's find out. 
+
+First, we need to prepare the data set, df we set above for analysis. For that I will remove any categorical variables, Species, which is the fifth column of our dataframe. Then, we need to _standardize_ the other metrics so that they have a mean of 0 and a standard deviation of around 1. The `scale` function takes care of that by centering and scaling.
+```{r}
+df <- scale(df[,-5])
+```
+Now we have to compute the distance between our observations, for which we'll use the `factoextra` package. `get_dist` automatically computes said distance for us, with the default being the standard Euclidian version $\begin{equation} d_{euc}(x,y) = \sqrt{\sum_{i=1}^n(x_i - y_i)^2}\end{equation}$. That's the one we will use, but be advised that [other distance metrics exist](https://www.datanovia.com/en/lessons/clustering-distance-measures/). After that we will visualise said distances on a heatmap.
+```{r}
+distance <- get_dist(df)
+fviz_dist(distance,show_labels = FALSE)
+```
+
+This visualisation yields that there are large differences between flowers in this dataset (purple) and there are also a fair amount of these that appear to be a part of the same cluster (red). I don't show the labels of the observations, because individual flowers have no meaningful names, but it is a perfectly sound thing to do with fewer observations that have meaningful labels, e.g. EU countries.
+
+Now that we know clusters exist, we have to determine the number of clusters (k) to use the k-means algorithm for clustering. We'll use what's called, the elbow method to visualise the within clusters sum of squares, WSS, for different numbers of clusters, k. 
+
+```{r}
+set.seed(123)
+wss <- 1 #placeholder
+for (i in 1:10) wss[i] <- sum(kmeans(df, centers=i)$withinss)
+ggplot(mapping = aes(1:10, wss))+
+  geom_point()+
+  geom_line()+
+  scale_x_continuous(name = "Number of clusters", breaks = seq(0,11,1))+
+  scale_y_continuous(name = "Within cluster sum of squares")+
+  theme_bw()
+print(wss,digits = 0)
+```
+This is somewhat of a complicated set of commands, so let's go through them one by one. First, we set seed so that the kmeans algorithm that we will run will come at the same result every time we run this code, because there is some randomness to the wss value for clusters. Then we define _wss_ as the sum of squares variation for values of k from 1 to 10 and then we plot it for values of k. Notice that when the `kmeans` function's argument `centers` effectively means k, number of clusters.     
+Lastly, we look for the "bend" or "elbow" in the data - the point where adding more clusters does not monumentally decrease _wss_. Here it seems to be 3 or 4. Having the benefit of knowing about there being three Species, I will choose 3 going forward, but it's close, as you can see both based on the plot and the printout of _wss_ values. 
+
+You can also use the function built-in the `factoextra` package, that does the same thing but in a less customizable fashion and without letting you know what calculation is going on in the background. Its arguments are the normalized dataset `df`, algorithm  `kmeans` and method `"wss"`.
+```{r}
+fviz_nbclust(df, kmeans, method = "wss")
+```
+
+Now that we've determined using the elbow method that the appropriate number of clusters is 3, we can see how does the algorithm divide them based on all four variables. We visualise the results using the function `fviz_cluster` which does that neatly for us. 
+```{r}
+iris_cluster_3 <- kmeans(df,centers = 3, nstart = 25)
+fviz_cluster(iris_cluster_3,data=df,ggtheme = theme_bw())
+```
+  
+Here we have the clusters visualised over the principal dimensions that contributed to variability the most. Although this looks good we might be interested in how that does compare to our initial plotting of the flowers based on Petal lengths and widths by Species. It is also interesting to see whether the Species are the clusters.
+
+```{r}
+iris_clustered <- iris %>% mutate(cluster = iris_cluster_3$cluster)
+ggplot(data = iris_clustered, aes(Petal.Width,Petal.Length)) + 
+  geom_point(mapping = aes(color = Species)) +
+  geom_point(data=iris_clustered[iris_clustered$cluster==1,],
+             pch=21, fill=NA, size=3, colour="red", stroke=1) +
+  geom_point(data=iris_clustered[iris_clustered$cluster==2,],
+             pch=21, fill=NA, size=3, colour="green", stroke=1) +
+  geom_point(data=iris_clustered[iris_clustered$cluster==3,],
+             pch=21, fill=NA, size=3, colour="blue", stroke=1) + 
+  theme_bw()
+
+```
+  
+Based on this we can see that the algorithm has mostly correctly clustered the flowers into Species, and that setosa is much different from the other two which have some overlap. Bear in mind that the computer has not only considered the petals which I visualised here but also the other two variables in making the clustering decision. 
+
+As a last note, we might want to investigate exactly how correctly the flowers were clustered.
+```{r}
+table(iris_clustered$Species,iris_clustered$cluster)
+```
+Now that we have the table we can calculate the number of correctly clustered flowers and the success ratio. 
+$$ rate_{success} = \frac{successes}{nrow(iris)} = \frac{50+39+36}{150} \approx 83.3\% $$
+It looks like our clustering was about 83% correct. Of course most of the time we're not gonna have such a neat measure of success as with the flowers example but it well illustrates that clustering is effective and useful. What if the species classification was lost from the data?
+
+## 6. Regression analysis
+
+You've probably heard of modeling before, it seems that nowadays everyone is answering all questions they have with _fitting a model_, _modeling a relationship_ or simply trying to _predict the sales_. Well the days of being left out of this conversation are over and we're now going to start modeling ourselves. We're gonna start with a detailed walk-through of a simple linear model and then go onto a multiple regression.
+
+### Simple linear regression
+
+The first type of regression we'll tackle is, well, simple. It is going to try and model the relationship between two variables, one _dependent_ and one _independent_, which also gets called _explanatory_ or a _predictor_. So, first we have to determine whether there is any ground to assume that a relationship between two variables exists, that they are _correlated_. Note that we do not require one to be _caused_ by the other. Although that might be the case, the general rule is:
+  
+> Correlation does not imply causation!
+
+So let's say we are interested in whether there is a relationship between sales of a company and the advertising budget, specifically how and if the budget can affect the sales. Hence sales will be our _dependent_ variable and advertising budget will be our _independent_ variable. See the sample regression line:
+$$\begin{equation}
+\hat{Sales}_i = \hat{\beta}_0 + \hat{\beta}_1 {Budget}_i + \hat{\epsilon}_i
+\end{equation}$$
+
+I got the dataset `marketing` from a package called `datarium`. It has a default of 4 variables, 3 that represent budgets for different advertising media and one for sales. Because we're doing a simple regression, I will create a new column, `marketing$Budget`, that stores the total advertising budget. Then we can inspect whether there is grounds to think that a relationship exists. Then I perform a regression using the `lm` function and store it in a variable `marketing_model`. Notice the syntax of `lm` is `lm(dependent ~ independent, data)`.
+```{r warning = FALSE, message = FALSE}
+library(datarium)
+marketing_df <- marketing %>% mutate(budget = rowSums(marketing[,1:3]))
+ggplot(marketing_df,aes(budget,sales))+
+  geom_point() + stat_smooth(method = lm, se = 0) + theme_bw()
+marketing_model <- lm(sales ~ budget, marketing_df)
+```
+  
+Later a very important step before we can start using the model we built in the last line is checking the *assumptions* of our chosen technique - simple linear regression. R makes it very easy with the built in `plot` function that gives us the four plots we need. [Read more about assumptions here.](http://people.duke.edu/~rnau/testing.htm)
+```{r}
+par(mfrow = c(2, 2)) #show plots next to each other 2x2
+plot(marketing_model)
+```
+  
+Based on the first plot, we can declare that there is indeed a linear relationship between the two variables because the residuals are evenly distributed around subsequent fitted values. You can easily examine that by looking at the red line, if it sticks to 0, there is no problem. Due to fewer observations towards the higher Sales values the relationship shifts slightly.   
+The second plot shows us quite clearly that the vast majority of residuals are normally distributed.  
+The third plot shows no clear pattern of variance which is desirable.However, it is not an ideal situation in which the red line would be entirely horizontal, indicating equal spread of variance along the values of $y$. 
+On the fourth plot, influtential points are shown, although there is no reason to assume that any outliers need to be removed, especially since linear regression is a robust method. [You can read more here.](https://www.jstor.org/stable/2286747?seq=1#metadata_info_tab_contents)
+The last assumption of the regression is independence of residuals, we can assume that the entries in this dataset are independent of one another if it is different companies. However, the documentation of the dataset does not shed light on this.
+
+Now, that we got assumptions out of the way, and they all seem to be satisfied we can examine our model, it's significance and how much of the variance it explains.
+```{r}
+summary(marketing_model)
+```
+Additionally, let's look at the mathematical representation of the model:
+$$\begin{equation}
+\hat{Sales}_i = 5.0916 + 0.0487 {Budget}_i + \hat{\epsilon}_i
+\end{equation}$$
+Looking at the p-values of the coefficients (all under 0.001) and the R-squared, we can confidently fail to reject the hypothesis that advertising budget has no effect on Sales. Our model's R-squared yields that the budget explains around 75% of the variation, which is remarkably high. We can read the model's _budget_ coefficient as 'For each 1000 USD spent on advertising, approximately 48.7 USD returns in form of sales'. That's not terribly efficient, but maybe the companies are in the process of building a customer base and therefore spend a lot on creating awareness. Remember that there is also the intercept which on its own should not be interpreted, but will be adding 5000 USD to a predicted _Sales_ value. This model is of course not perfect and there is other possible pitfalls such as the [ommitted variable bias](http://hedibert.org/wp-content/uploads/2016/09/Bias-omittedvariable.pdf).
+
+Additionally, the summary of the model output in R is explained in StatQuest's short video.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/u1cc1r_Y7M0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+### Multiple regression
+
+Let's say your boss looks at the report of your results from the previous section and e-mails you that he'd like to know which of the media mix is most efficient in impacting the sales based on the data. There, you're looking at a multiple regression problem, with one dependent variable, same as before, _Sales_, and three independent variables, budgets of the three channels your company advertises through, _youtube_, _facebook_ and _newspaper_. First, you write out the model:
+$$\begin{equation}
+\hat{Sales}_i = \hat{\beta}_0 + \hat{\beta}_1 {youtube}_i + \hat{\beta}_2 {facebook}_i + \hat{\beta}_3 {newspaper}_i + \hat{\epsilon}_i
+\end{equation}$$
+Then you dive straight into R.
+```{r}
+marketing_model_multiple <- lm(sales ~ youtube + facebook + newspaper, marketing_df)
+```
+Then the discussion of assumptions should follow, but seeing as we've discussed them in detail above, I will only focus on the one assumption that occurs in a multple regression and does not in a simple linear. Said assumption is independence of variables, or lack of multicollinearity. There are several ways of invetigating that, I will use a simple correlation plot, but you may also want to [watch the VIF method](https://www.youtube.com/watch?v=I4z3yjoEADY). 
+```{r warning=FALSE, message=FALSE}
+library(corrplot)
+corrplot(cor(marketing_df[,c(1:3)]), method = "circle")
+```
+  
+Here we see that there is some multicollinearity, especially between facebook and newspaper, which is over 0.35. Multicollinearity could result in bloated standard errors and in turn, larger p-values for the two variables. Although it is worth noting that it does not affect the overall model fit, so R-squared or F does not get distorted. Additionally, as a rule of thumb, any correlation between the variables $r\leqslant0.9$, [should not be worrying](https://stats.stackexchange.com/questions/100175/when-can-we-speak-of-collinearity), so we can safely proceed. Let's draw up the summary of the model then:
+```{r}
+summary(marketing_model_multiple)
+```
+Newspaper looks to be highly insignificant, therefore we can safely drop it and run a restricted version of the model.
+```{r}
+summary(lm(sales ~ youtube + facebook, marketing_df))
+```
+$$\begin{equation}
+\hat{Sales}_i = 3.5053 + 0.0458 {youtube}_i + 0.1880 {facebook}_i + \hat{\epsilon}_i
+\end{equation}$$
+
+We can quickly determine that this model is better at capturing the variation in _Sales_, than the previous simple linear one, because of the higher R-squared, lower RSE and higher F-statistic. The coefficients next to the independent variables can be interpreted as such, 'For each 1000USD spent on YouTube advertising, sales rise by 45.8USD. Analogically for Facebook adverts, sales rise by 188USD'. Now you can present the results to your boss, which _indicate_ that Facebook is the most efficient medium, while it couldn't be rejected that newspaper budget has no influence over sales. You might also want to add that possibly there are other variables that you don't have access to in play, so he should ask other people in the company for input before pulling all the money from the local newspaper to invest it in Facebook ads. 
+
+If you'd like watch a video on a different multiple regression example in R, I recommend the one below.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/S-zKhFr91Tg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+Additionally, if you're interested in how to use R to model, with a much broader set of tools, as always, [I refer you to Hadley's book](https://r4ds.had.co.nz/model-basics.html).
+
+## 7. Noisy data pt. 1
+
+In this section we take a step back from modeling and analyze the distribution of our data. Before we largely assumed that it's [normally distributed](https://www3.nd.edu/~rwilliam/stats1/x21.pdf), now we are going to investigate whether that assumption was a warranted one. 
+
+### Q-Q plot
+
+One of the best ways to see if some univariate data (one variable/column) matches a certain distribution is drawing up a quantile-quantile plot. [If you'd like to brush up on what a quantile is, you can do so here.](https://www.youtube.com/watch?v=IFKQLDmRK0Y) The Q-Q plots the quantiles of your sample on the y axis and the theoretical quantiles, for example from the normal distribution on the x axis. Then if the plotted quantiles ('circles' on the graph) fall on a linear function that means that the distribution of the variable comes approximately from some theoretical distribution. In this part we're going to focus on checking if our distributions are normal.
+
+Consider the marketing data from the previous sections. Suppose we wanted to check whether the mean of budgets for Newspaper and Facebook channels is the same. To check that on a 95% significance level we want to perform a t-test. One of the assumptions is that the variables are normally distributed. Let's use a Q-Q plot to verify that visually.
+
+```{r}
+par(mfrow = c(1,2))
+qqnorm(marketing$facebook)
+qqline(marketing$facebook, col = 2)
+qqnorm(marketing$newspaper)
+qqline(marketing$newspaper, col = 2)
+```
+
+
+Based on these plots, we can see that most of the values (quantiles) of the variables do follow a normal distribution but for the lowest and highest. To the naked eye it looks as though the assumption is mostly correct. However, R is a statistical software and we're always talking about tests, so is it possible to test for normality to be _sure_ (on a 95% level, of course)? 
+
+### Testing for normality
+
+Yes indeed, there is a couple of those tests, but the most popular one is called is the Shapiro-Wilk test. In R, we can easily do it using the built-in `stats` package's `shapiro.test` function. I hope apologies to Wilk have been made.
+
+```{r}
+shapiro.test(marketing$facebook)
+shapiro.test(marketing$newspaper)
+```
+
+The results of the test yield that the null hypothesis, which is "the data belongs to a normal distribution", is rejected for both of the variables. Therefore, we technically cannot assume normality based on the Shapiro-Wilk test, even though it looked promising on the QQ-plot. In both of the distributions we can observe what is called "heavy tails", as in more extreme points than we'd expect in a normal distribution. [Read more about interpreting QQ plots here.](https://data.library.virginia.edu/understanding-q-q-plots/) 
+
+Lastly, be wary that there is [an argument for normality testing being 'essentially useless'](https://stats.stackexchange.com/questions/2492/is-normality-testing-essentially-useless), especially for bigger sample sizes. 
+
+
+
+
+## 8. Noisy data pt. 2
+
+In this section we will introduce methods of making our data more normal and some non-parametric tests.
+
+### Transform data for normality
+
+There are several ways to transform data to make it fit the normal distribution better. The easiest, most straightforward ways are _logarithm_, _square-root_ and _reciprocity_. Incidentally, these are also the most wide-spread. [Read more about 'simple' transformations here.](https://fmwww.bc.edu/repec/bocode/t/transint.html)
+
+It's easy to implement those transformations in R, here we will also visualise a QQ plot to try and assess whether we've improved the distribution of `facebook` from previous examples.
+
+```{r}
+par(mfrow = c(1,3))
+qqnorm(log10(marketing$facebook+1), main = "Q-Q (log transformation)")
+qqline(log10(marketing$facebook), col = 2)
+qqnorm(sqrt(marketing$facebook), main = "Q-Q (square-root transformation)")
+qqline(sqrt(marketing$facebook), col = 2)
+qqnorm(1/(marketing$facebook+1), main = "Q-Q (reciprocity transformation)")
+qqline(1/(marketing$facebook+1), col = 2)
+```
+
+As we can see on the QQ plots, neither of the transformations improved the distribution's likeness to the Gaussian curve. Therefore, we might look to some more complex transformations such as the _Box-Cox_ transformation, _Yeo-Johnson_ and more. Those methods are much more difficult to interpret and implement. I recommend reading [this CRAN vignette](https://cran.r-project.org/web/packages/bestNormalize/vignettes/bestNormalize.html) about the `bestNormalize` package designed for picking the best method and using the methods with the `MASS` package. 
+
+### Non-parametric methods
+
+Another approach to having a non-normally distributed data is changint the statistical method of testing rather than trying to "normalize" the data which clearly isn't. Such statistical methods are called _non-parametric_, because they do _not_ estimate the parameters assuming a distribution. 
+
+Some of the most popular tests you might come across are: Mann-Whitney U, Wilcoxon Signed Rank, Kruskal Wallis, and Friedman tests. [For an R guideline, click here.](https://www.statmethods.net/stats/nonparametric.html)
+
+In our example, what we wanted to do in the first place was compare the means of two numeric variables, `facebook` and `newspaper` using a t-test. Since, we've found out that our variables are not normally distributed, tried some basic transformations which did not improve the fit. Therefore, we will use a non-parametric alternative, an _independent 2-group Mann-Whitney U Test_, also called a _Wilcoxon rank sum_. The only assumption is that our data is independent and randomly drawn. As we discussed earlier, this is true if our data is all for different randomly drawn companies and not the same one over time. We have no reason to assume otherwise, although the documentation is not clear.
+```{r}
+wilcox.test(marketing$newspaper,marketing$facebook, conf.int = TRUE)
+```
+$P-value < 0.05$, therefore we reject the null hypothesis that the mean budgets for the two media are the same. In fact, we find that facebook budgets are higher by approximately between USD 2,000 and 10,000 (remember that our data is in thousands) on a 95% confidence level. 
+
+For a video featuring a non-parametric test for different data in R, check out the one below.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/LuWjx0_-VW0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  
+## 9. Data visualisation
+
+It seems that we have already used data visualisation extensively for other tasks without ever talking about data visualisation. So, I will assume that you already have some practical experience with graphing but need a general explanation to start creating your own plots without problem. 
+
+The tool we are going to use is `ggplot2` by Hadley Wickham which is based on the _Grammar of Graphics_, developed by Leland Wilkinson. In it, each individual component of a plot is organized into _layers_ which is how ggplots are usually built, with the base `ggplot` function and added (`+`) layers that put geometric objects on the graph, such as `geoms` (e.g. `geom_point` which adds scattered points). Below I give you the general recipe for a ggplot.  
+```
+ggplot(data = <DATA>) + 
+  <GEOM_FUNCTION>(
+     mapping = aes(<MAPPINGS>),
+     stat = <STAT>, 
+     position = <POSITION>) +
+  <COORDINATE_FUNCTION> +
+  <FACET_FUNCTION> +
+  <THEME>
+```
+No one can explain ggplot better than its creator, so I really really encourage you to read the chapter in the book by, you guessed it, Hadley Wickham. [Jump to chapter 3 here](https://r4ds.had.co.nz/data-visualisation.html). 
+
+Another brilliant reading is "Data visualization: A practical introduction" by Kieran Healy which you might know from lectures. Assuming that you're already familiar with the basics of how to get around in R, I'd suggest starting at [Chapter 3](https://socviz.co/makeplot.html#makeplot) and going as far as possible.
+
+Not instead, but as an addition, before or after reading, you can check out a Data Science Dojo webinar on ggplot. The speaker analyzes a famous dataset about titanic. It features, bar, box and and density plots alongside histograms. It also handles faceting, proper theme and labelling. I embedded the webinar below. It may seem a tad long but the proper R section begins around the 26th minute and 1.25 speed is encouraged. The R file for the session is [here](https://code.datasciencedojo.com/datasciencedojo/tutorials/blob/master/Introduction%20to%20Data%20Visualization%20with%20R%20and%20ggplot2/Data%20Visualization%20with%20ggplot2.R) and the csv can be downloaded [here](https://www.kaggle.com/hesh97/titanicdataset-traincsv).
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/49fADBfcDD4?start=1615" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+If you want to see examples of some more complicated plots, I recommend checking out [these resources](http://uc-r.github.io/ggplot) from the University of Cincinnati. The first introductory section is somewhat reduntant with the book, but others present some very cool and advanced ideas for visualising many variables at once.
+
+It can be overwhelming looking at all these plots and webinar makers that seem to know the grammar of graphics like the grammar of English or better. Well, fear not, nobody is required to remember any of this by heart, and many don't. [Cheatsheets are not only allowed, but even encouraged.](https://rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf).
+
+![](images/Ggplotcheat.png)
+
+Ggplot2 is incredibly powerful and once you master it, truly beautiful things happen. I leave you with a visualisation of `diamonds`, with 4 variables at once, and yet quite readable. Color is classified alphabetically from D (best) to J (worst). The facets refer to the cut quality.
+```{r warning=FALSE, message=FALSE}
+ggplot(diamonds,
+       aes(x = carat,
+           y = price)) +
+  geom_point(aes(colour = color),
+             alpha = 0.5,
+             size = 0.5) +
+  scale_color_brewer(palette = "PRGn") +
+  geom_smooth(se = FALSE,
+              linetype = "dashed",
+              colour = "black",
+              size = 0.4) +
+  facet_wrap(~cut) +
+  theme_minimal() +
+  labs(y = "price (USD)")
+
+```
+  
+
+
+  
+
